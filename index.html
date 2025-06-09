@@ -1,82 +1,81 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>EcoBottle Store</title>
   <link rel="stylesheet" href="style.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet">
 </head>
 <body>
-  <div class="background-overlay"></div>
-
   <header>
     <h1>EcoBottle Store</h1>
-    <button id="cart-btn">🛒 Carrinho (<span id="cart-count">0</span>)</button>
+    <button onclick="toggleCart()">🛒 Cart (<span id="cart-count">0</span>)</button>
   </header>
 
-  <main class="product-container">
+  <main>
     <div class="product">
-      <img src="garrafa500ml.jpg" alt="EcoBottle 500ml" / class="imagem1">
-      <h2>EcoBottle 500ml</h2>
-      <p>Com sensores de hidratação e plástico reciclado dos oceanos.</p>
-      <p class="price">R$120</p>
-      <button onclick="addToCart('EcoBottle 500ml', 120)">Adicionar ao carrinho</button>
+      <img src="ecobottle500.png" alt="Eco Bottle 500ml">
+      <h2>Eco Bottle 500ml</h2>
+      <p>$15.00</p>
+      <button onclick="addToCart('Eco Bottle 500ml', 15)">Add to Cart</button>
     </div>
 
     <div class="product">
-      <img src="garrafa1L.jpg" alt="EcoBottle Pro 1L" class="imagem2"/>
-      <h2>EcoBottle Pro 1L</h2>
-      <p>Filtra água salgada + sensores de hidratação.</p>
-      <p class="price">R$260</p>
-      <button onclick="addToCart('EcoBottle Pro 1L', 260)">Adicionar ao carrinho</button>
+      <img src="ecobottle1l.png" alt="Eco Bottle Pro 1L">
+      <h2>Eco Bottle Pro 1L</h2>
+      <p>$25.00</p>
+      <button onclick="addToCart('Eco Bottle Pro 1L', 25)">Add to Cart</button>
     </div>
   </main>
 
-  <div id="cart" class="cart hidden">
-    <h2>Seu Carrinho</h2>
+  <aside id="cart">
+    <h2>Your Cart</h2>
     <ul id="cart-items"></ul>
-    <p id="total">Total: R$0</p>
-  </div>
+    <p>Total: $<span id="total">0.00</span></p>
+    <button onclick="toggleCart()">Close</button>
+  </aside>
 
-  <footer>©EcoBottle</footer>
+  <footer>
+    <p>© EcoBottle</p>
+  </footer>
 
   <script>
-    const cartBtn = document.getElementById("cart-btn");
-    const cart = document.getElementById("cart");
-    const cartItems = document.getElementById("cart-items");
+    let cart = [];
     const cartCount = document.getElementById("cart-count");
-    const totalDisplay = document.getElementById("total");
-
-    let cartData = [];
-    
-    cartBtn.addEventListener("click", () => {
-      cart.classList.toggle("hidden");
-    });
+    const cartItems = document.getElementById("cart-items");
+    const total = document.getElementById("total");
+    const cartElement = document.getElementById("cart");
 
     function addToCart(name, price) {
-      cartData.push({ name, price });
+      cart.push({ name, price });
       updateCart();
     }
 
     function removeFromCart(index) {
-      cartData.splice(index, 1);
+      cart.splice(index, 1);
       updateCart();
     }
 
     function updateCart() {
       cartItems.innerHTML = "";
-      let total = 0;
-
-      cartData.forEach((item, index) => {
+      let sum = 0;
+      cart.forEach((item, index) => {
+        sum += item.price;
         const li = document.createElement("li");
-        li.innerHTML = `${item.name} - R$${item.price} <button onclick="removeFromCart(${index})">Remover</button>`;
+        li.textContent = `${item.name} - $${item.price.toFixed(2)} `;
+        const removeBtn = document.createElement("button");
+        removeBtn.textContent = "Remove";
+        removeBtn.onclick = () => removeFromCart(index);
+        li.appendChild(removeBtn);
         cartItems.appendChild(li);
-        total += item.price;
       });
+      total.textContent = sum.toFixed(2);
+      cartCount.textContent = cart.length;
+    }
 
-      cartCount.textContent = cartData.length;
-      totalDisplay.textContent = `Total: R$${total}`;
+    function toggleCart() {
+      cartElement.classList.toggle("visible");
     }
   </script>
 </body>
