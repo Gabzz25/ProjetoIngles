@@ -1,0 +1,6 @@
+services:
+  site:
+    build: .
+    container_name: meu-site
+    ports:
+      - "8080:80"
